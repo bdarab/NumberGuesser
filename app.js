@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
 /* eslint-disable use-isnan */
 /* eslint-disable radix */
@@ -44,21 +45,43 @@ guessBtn.addEventListener('click', () => {
 
   // Check if it is a winning number
   if (guess === winningNum) {
-    // Disable Input
-    guessInput.disabled = true
-    // Set winning color
-    guessInput.style.borderColor = 'green'
-    // show winning message
-    setMessage(`Congrats, you gussed the winning number ${winningNum}`, 'green')
+    // Game Over - won
+    gameOver(true, `Congrats, you gussed the winning number ${winningNum}`)
   } else {
-    // set losing color
-    guessInput.style.borderColor = 'red'
-    // show losing message
-    setMessage(`Sorry, you guessed wrong, try again`, 'red')
-    // Reset input for another try
-    guessInput.value = ''
+    // Minus one try
+    guessesLeft -= 1
+    if (guessesLeft === 0) {
+     // Game Over - lost
+      gameOver(false, `GAME OVER, you lost! winning number was ${winningNum}`, 'red')
+    } else {
+      // Game continues minus 1
+      // set losing color
+      guessInput.style.borderColor = 'red'
+      // show losing message
+      setMessage(`Sorry, you guessed wrong, ${guessesLeft} gusses left!`, 'red')
+      // Reset input for another try
+      guessInput.value = ''
+    }
   }
 })
+
+// Game Over Function
+
+function gameOver (won, msg) {
+  // setting color
+  let color
+  // eslint-disable-next-line no-unused-expressions
+  won === true ? color = 'green' : color = 'red'
+
+  // Disable Input
+  guessInput.disabled = true
+  // set losing color
+  guessInput.style.borderColor = color
+  // set message color
+  message.style.color = color
+  // show losing message
+  setMessage(msg)
+}
 
 // setMessage function
 function setMessage (msg, color) {
